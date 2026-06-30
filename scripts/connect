@@ -12,7 +12,7 @@ cleanup() {
     kill -9 "$pid";
   done
 
-  hyprctl output remove headless Virtual-1
+  hyprctl output remove Virtual-1
 }
 
 trap cleanup EXIT
