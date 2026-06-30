@@ -11,11 +11,14 @@ cleanup() {
   for pid in "${PIDS[@]}"; do
     kill -9 "$pid";
   done
+
+  hyprctl output remove headless Virtual-1
 }
 
 trap cleanup EXIT
 
 sudo docker run \
+  --add-host host.docker.internal:host-gateway \
   -p 4822:4822 \
   --name guacd \
   -d guacamole/guacd
@@ -23,11 +26,14 @@ sudo docker run \
 sudo docker run --name guacamole \
   --add-host host.docker.internal:host-gateway \
   -e GUACD_HOSTNAME=host.docker.internal \
+  -e LOG_LEVEL="debug" \
   -v "$(pwd)/guacamole:/etc/guacamole" \
   -d \
   -p 8080:8080 guacamole/guacamole
 
-nohup ./wayvnc/build/wayvnc > wayvnc.out &
+hyprctl output create headless Virtual-1
+
+nohup ./wayvnc/build/wayvnc 0.0.0.0 5900 "Virtual-1" > wayvnc.out &
 
 PIDS+=("$!")
 
@@ -37,4 +43,23 @@ PIDS+=("$!")
 
 nohup opencode web > opencode.out &
 
+sleep 2
+
 PIDS+=("$!")
+
+CLIENTS=$(hyprctl clients -j | jq -r '.[] | select(.class | test("chromium"; "i")) | .address')
+
+COUNT=$(echo "$CLIENTS" | wc -l)
+
+echo "Found $COUNT Chromium window(s). Moving them to Virtual-1..."
+
+for ADDR in $CLIENTS; do
+    echo "→ Moving window $ADDR"
+    hyprctl dispatch focuswindow address:"$ADDR" >/dev/null
+    hyprctl dispatch movewindow mon:Virtual-1 >/dev/null
+    sleep 0.2   # Small delay helps Hyprland process moves reliably
+done
+
+hyprctl keyword monitor Virtual-1,preferred,auto,1
+
+sleep infinity
