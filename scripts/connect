@@ -8,6 +8,8 @@ cleanup() {
   sudo docker rm -f guacamole;
   sudo docker rm -f guacd;
 
+  pkill -f opencode
+
   for pid in "${PIDS[@]}"; do
     kill -9 "$pid";
   done
@@ -41,7 +43,7 @@ nohup chromium --user-data-dir="$(pwd)/chrome-profile" --remote-debugging-port=9
 
 PIDS+=("$!")
 
-nohup opencode web > opencode.out &
+nohup opencode web --hostname=0.0.0.0 > opencode.out &
 
 sleep 2
 
