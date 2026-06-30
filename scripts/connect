@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+PIDS=()
+
+cleanup() {
+  sudo rm -f guacamole;
+  sudo rm -f guacd;
+
+  for pid in "${PIDS[@]}"; do
+    kill -9 "$pid";
+  done
+}
+
+sudo docker run \
+  -p 4822:4822 \
+  --name guacd \
+  -d guacamole/guacd
+
+sudo docker run --name guacamole \
+  --add-host host.docker.internal \
+  -e GUACD_HOSTNAME=host.docker.internal \
+  -v "$(pwd)/guacamole:/etc/guacamole" \
+  -d \
+  -p 8080:8080 guacamole/guacamole
+
+nohup opencode web > opencode.out &
+
+PIDS+=("$!")
