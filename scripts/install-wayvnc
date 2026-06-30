@@ -16,5 +16,7 @@ cd neatvnc/subprojects
 ln -s ../../aml .
 cd -
 
+cd wayvnc
+
 meson build
 ninja -C build
