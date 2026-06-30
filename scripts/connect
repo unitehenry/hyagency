@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 PIDS=()
 
 cleanup() {
-  sudo rm -f guacamole;
-  sudo rm -f guacd;
+  sudo docker rm -f guacamole;
+  sudo docker rm -f guacd;
 
   for pid in "${PIDS[@]}"; do
     kill -9 "$pid";
   done
 }
+
+trap cleanup EXIT
 
 sudo docker run \
   -p 4822:4822 \
@@ -17,11 +21,19 @@ sudo docker run \
   -d guacamole/guacd
 
 sudo docker run --name guacamole \
-  --add-host host.docker.internal \
+  --add-host host.docker.internal:host-gateway \
   -e GUACD_HOSTNAME=host.docker.internal \
   -v "$(pwd)/guacamole:/etc/guacamole" \
   -d \
   -p 8080:8080 guacamole/guacamole
+
+nohup ./wayvnc/build/wayvnc > wayvnc.out &
+
+PIDS+=("$!")
+
+nohup chromium --user-data-dir="$(pwd)/chrome-profile" --remote-debugging-port=9222 > chromium.out &
+
+PIDS+=("$!")
 
 nohup opencode web > opencode.out &
 
