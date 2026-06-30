@@ -3,3 +3,7 @@ aml
 neatvnc
 wayvnc
 chrome-profile
+.opencode/*.lock
+.opencode/package.json
+.opencode/package-lock.json
+node_modules
