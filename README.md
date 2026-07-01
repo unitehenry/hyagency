@@ -15,7 +15,32 @@ The idea is to have a browser with personal profiles saved, so an agent can inte
 
 ## Architecture
 
-[diagram]
+```mermaid
+flowchart TD
+    client
+    nginx
+    guacamole
+    guacd
+    wayvnc
+    opencode
+    agent-browser
+    chromium
+
+    subgraph host
+        guacamole-->guacd
+        guacd-->wayvnc
+
+        opencode-- agents/browser.md -->agent-browser
+        agent-browser-- CDP -->chromium
+    end
+
+    subgraph proxy
+        guacamole-- tunnel -->nginx
+        opencode-- tunnel -->nginx
+    end
+
+    client-- HTTP Basic Auth -->nginx
+```
 
 ## Dependencies
 
