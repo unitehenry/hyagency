@@ -7,7 +7,7 @@ This setup includes the following:
 
 - Isolated hyprland desktop environment with a VNC server for remote usage
 - Chromium instance with CDP support
-- Opencode web UI to interact with browser using `agent-browser`
+- [Opencode Web UI](https://opencode.ai/docs/web) to interact with browser using `agent-browser`
 - [Apache Guacamole](https://guacamole.apache.org) to visually see what the agent is doing, or to interact with the browser directly
 - Nginx reverse proxy that exposes services over SSH tunnel
 
