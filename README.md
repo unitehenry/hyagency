@@ -41,11 +41,13 @@ TUNNEL_HOST="root@127.0.0.1" scripts/connect
 
 ### Port Mapping
 
-- Guacamole - 8080 (tunnel support)
-- Opencode UI - 4090 (tunnel support)
-- Guacd - 4222
-- Chromium CDP - 9222
-- Wayvnc - 5900
+| Service | Port | Notes |
+|---------|------|-------|
+| Guacamole | 8080 | tunnel support |
+| Opencode UI | 4090 | tunnel support |
+| Guacd | 4222 | |
+| Chromium CDP | 9222 | |
+| Wayvnc | 5900 | |
 
 ### Guacamole Login
 
