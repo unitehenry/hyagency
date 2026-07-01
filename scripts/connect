@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+export TUNNEL_HOST="${TUNNEL_HOST:-}"
+
 declare -a PIDS
 
 cleanup() {
@@ -28,7 +30,9 @@ PIDS+=($!)
 ./scripts/virtual &
 PIDS+=($!)
 
-./scripts/tunnel &
-PIDS+=($!)
+if [ -n "$TUNNEL_HOST" ]; then
+  ./scripts/tunnel &
+  PIDS+=($!)
+fi
 
 sleep infinity

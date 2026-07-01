@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+if [ -z "${TUNNEL_HOST:-}" ]; then
+  exit 0
+fi
+
 declare -a SSH_PIDS
 
 cleanup() {
@@ -16,10 +20,10 @@ cleanup() {
 
 trap cleanup EXIT
 
-ssh -N -R 8080:127.0.0.1:8080 root@142.93.14.238 &
+ssh -N -R 8080:127.0.0.1:8080 "$TUNNEL_HOST" &
 SSH_PIDS+=($!)
 
-ssh -N -R 4090:127.0.0.1:4090 root@142.93.14.238 &
+ssh -N -R 4090:127.0.0.1:4090 "$TUNNEL_HOST" &
 SSH_PIDS+=($!)
 
 sleep infinity
