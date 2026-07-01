@@ -17,20 +17,17 @@ The idea is to have a browser with personal profiles saved, so an agent can inte
 
 [diagram]
 
-- Desktop
-    - port 8080
-    - guacamole
-    - guacd
-    - wayvnc
-- Browser
-    - port 4080
-    - opencode
-    - agent-browser
-    - chromium
-
 ## Dependencies
 
 This repository mostly serves as a reference configuration, but here is a list of the dependencies needed to recreate this setup:
+
+- `docker`
+- `hyprland`
+- `agent-browser`
+- `wayvnc`
+- `chromium`
+- `opencode`
+- `nohup`
 
 ## Usage
 
