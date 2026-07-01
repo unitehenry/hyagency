@@ -5,7 +5,7 @@
 
 This setup includes the following:
 
-- Isolated Hyprland desktop environment with a VNC server for remote usage
+- Isolated hyprland desktop environment with a VNC server for remote usage
 - Chromium instance with CDP support
 - Opencode web UI to interact with browser using `agent-browser`
 - Apache Guacamole to visually see what the agent is doing, or to interact with the browser directly
@@ -88,7 +88,7 @@ The nginx reference configuration also includes unauthenticated rate limiting so
 
 ## Hyprland Workspaces
 
-When creating a virtual monitor with Hyprland, all unused workspaces get moved to the new monitor by default. Consider pinning the workspaces you want to keep in your primary environment:
+When creating a virtual monitor with hyprland, all unused workspaces get moved to the new monitor by default. Consider pinning the workspaces you want to keep in your primary environment:
 
 ```
 workspace = 1, monitor:HDMI-A-1, persistent:true
