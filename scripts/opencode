@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cleanup() {
+  pkill -f opencode || true
+}
+
+trap cleanup EXIT
+
+nohup opencode web --hostname=0.0.0.0 --port=4090 > opencode.out &
+
+sleep infinity

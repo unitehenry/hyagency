@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cleanup() {
+  pkill -f chromium || true
+}
+
+trap cleanup EXIT
+
+nohup chromium --user-data-dir="$(pwd)/chrome-profile" --remote-debugging-port=9222 > chromium.out &
+
+sleep infinity

@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cleanup() {
+  sudo docker rm -f guacamole || true
+  sudo docker rm -f guacd || true
+}
+
+trap cleanup EXIT
+
+sudo docker run \
+  --add-host host.docker.internal:host-gateway \
+  -p 4822:4822 \
+  --name guacd \
+  -d guacamole/guacd
+
+sudo docker run --name guacamole \
+  --add-host host.docker.internal:host-gateway \
+  -e GUACD_HOSTNAME=host.docker.internal \
+  -e LOG_LEVEL="debug" \
+  -v "$(pwd)/guacamole:/etc/guacamole" \
+  -d \
+  -p 8080:8080 guacamole/guacamole
+
+sleep infinity

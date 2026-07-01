@@ -2,72 +2,33 @@
 
 set -euo pipefail
 
-declare -a SSH_PIDS
+declare -a PIDS
 
 cleanup() {
-  sudo docker rm -f guacamole;
-  sudo docker rm -f guacd;
-
-  pkill -f opencode
-  pkill -f wayvnc;
-  pkill -f chromium;
-
-  hyprctl output remove Virtual-1
-
-  for pid in "${SSH_PIDS[@]}"; do
+  for pid in "${PIDS[@]}"; do
     if kill -0 "$pid" 2>/dev/null; then
-        echo "  Killing SSH PID $pid"
-        kill "$pid" 2>/dev/null || true
-        wait "$pid" 2>/dev/null || true
+      echo "  Killing $pid"
+      kill "$pid" 2>/dev/null || true
+      wait "$pid" 2>/dev/null || true
     fi
   done
 }
 
 trap cleanup EXIT
 
-sudo docker run \
-  --add-host host.docker.internal:host-gateway \
-  -p 4822:4822 \
-  --name guacd \
-  -d guacamole/guacd
+./scripts/guacamole &
+PIDS+=($!)
 
-sudo docker run --name guacamole \
-  --add-host host.docker.internal:host-gateway \
-  -e GUACD_HOSTNAME=host.docker.internal \
-  -e LOG_LEVEL="debug" \
-  -v "$(pwd)/guacamole:/etc/guacamole" \
-  -d \
-  -p 8080:8080 guacamole/guacamole
+./scripts/chromium &
+PIDS+=($!)
 
-hyprctl output create headless Virtual-1
+./scripts/opencode &
+PIDS+=($!)
 
-nohup wayvnc 0.0.0.0 5900 "Virtual-1" > wayvnc.out &
+./scripts/virtual &
+PIDS+=($!)
 
-nohup chromium --user-data-dir="$(pwd)/chrome-profile" --remote-debugging-port=9222 > chromium.out &
-
-nohup opencode web --hostname=0.0.0.0 --port=4090 > opencode.out &
-
-sleep 2
-
-CLIENTS=$(hyprctl clients -j | jq -r '.[] | select(.class | test("chromium"; "i")) | .address')
-
-COUNT=$(echo "$CLIENTS" | wc -l)
-
-echo "Found $COUNT Chromium window(s). Moving them to Virtual-1..."
-
-for ADDR in $CLIENTS; do
-    echo "→ Moving window $ADDR"
-    hyprctl dispatch focuswindow address:"$ADDR" >/dev/null
-    hyprctl dispatch movewindow mon:Virtual-1 >/dev/null
-    sleep 0.2
-done
-
-hyprctl keyword monitor Virtual-1,preferred,auto,1
-
-ssh -f -N -R 8080:127.0.0.1:8080 root@142.93.14.238
-SSH_PIDS+=($!)
-
-ssh -f -N -R 4090:127.0.0.1:4090 root@142.93.14.238
-SSH_PIDS+=($!)
+./scripts/tunnel &
+PIDS+=($!)
 
 sleep infinity
