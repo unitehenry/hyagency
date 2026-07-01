@@ -1,7 +1,4 @@
-aml
 *.out
-neatvnc
-wayvnc
 chrome-profile
 .opencode/*.lock
 .opencode/package.json
