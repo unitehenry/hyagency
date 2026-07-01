@@ -82,7 +82,7 @@ Password: password
 
 ## Security
 
-The nginx reference uses HTTP basic authentication with the intent to host the Opencode UI and Apache Guacamole instance on the internet. If your intent is to adopt the same configuration, be sure to enable SSL on the public server used to serve as your reverse proxy. Otherwise, the basic auth credentials will be unecrypted in traffic and anyone will have remote access to your machine exposed.
+The nginx reference uses HTTP basic authentication with the intent to host the Opencode UI and Apache Guacamole instance on the internet. If your intent is to adopt the same configuration, be sure to enable SSL on the public server used to serve as your reverse proxy. Otherwise, the basic auth credentials will be unecrypted in traffic and anyone will have remote access to your machine.
 
 The nginx reference configuration also includes unauthenticated rate limiting so attackers can't brute force the password.
 
