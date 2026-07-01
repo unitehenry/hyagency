@@ -31,7 +31,7 @@ sudo docker run --name guacamole \
 
 hyprctl output create headless Virtual-1
 
-nohup ./wayvnc/build/wayvnc 0.0.0.0 5900 "Virtual-1" > wayvnc.out &
+nohup wayvnc 0.0.0.0 5900 "Virtual-1" > wayvnc.out &
 
 nohup chromium --user-data-dir="$(pwd)/chrome-profile" --remote-debugging-port=9222 > chromium.out &
 
