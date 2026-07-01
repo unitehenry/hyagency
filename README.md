@@ -47,12 +47,12 @@ flowchart TD
 This repository mostly serves as a reference configuration, but here is a list of the dependencies needed to recreate this setup:
 
 - `docker`
-- `hyprland`
-- `agent-browser`
-- `wayvnc`
 - `chromium`
-- `opencode`
 - `nohup`
+- [`hyprland`](https://hypr.land)
+- [`agent-browser`](https://github.com/vercel-labs/agent-browser)
+- [`wayvnc`](https://github.com/any1/wayvnc)
+- [`opencode`](https://opencode.ai)
 
 ## Usage
 
