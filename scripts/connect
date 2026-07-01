@@ -49,7 +49,7 @@ for ADDR in $CLIENTS; do
     echo "→ Moving window $ADDR"
     hyprctl dispatch focuswindow address:"$ADDR" >/dev/null
     hyprctl dispatch movewindow mon:Virtual-1 >/dev/null
-    sleep 0.2   # Small delay helps Hyprland process moves reliably
+    sleep 0.2
 done
 
 hyprctl keyword monitor Virtual-1,preferred,auto,1
