@@ -2,17 +2,13 @@
 
 set -euo pipefail
 
-PIDS=()
-
 cleanup() {
   sudo docker rm -f guacamole;
   sudo docker rm -f guacd;
 
   pkill -f opencode
-
-  for pid in "${PIDS[@]}"; do
-    kill -9 "$pid";
-  done
+  pkill -f wayvnc;
+  pkill -f chromium;
 
   hyprctl output remove Virtual-1
 }
@@ -37,17 +33,11 @@ hyprctl output create headless Virtual-1
 
 nohup ./wayvnc/build/wayvnc 0.0.0.0 5900 "Virtual-1" > wayvnc.out &
 
-PIDS+=("$!")
-
 nohup chromium --user-data-dir="$(pwd)/chrome-profile" --remote-debugging-port=9222 > chromium.out &
-
-PIDS+=("$!")
 
 nohup opencode web --hostname=0.0.0.0 > opencode.out &
 
 sleep 2
-
-PIDS+=("$!")
 
 CLIENTS=$(hyprctl clients -j | jq -r '.[] | select(.class | test("chromium"; "i")) | .address')
 
