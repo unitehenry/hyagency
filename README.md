@@ -58,7 +58,7 @@ This repository mostly serves as a reference configuration, but here is a list o
 
 ```bash
 # TUNNEL_HOST is optional
-TUNNEL_HOST="root@127.0.0.1" scripts/connect
+TUNNEL_HOST="root@127.0.0.1" scripts/serve
 ```
 
 ### Port Mapping
